@@ -1,0 +1,146 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body onload="hideInfo()">
+    <script type="text/javascript">
+        function FileDetails() {
+
+            // GET THE FILE INPUT.
+            var fi = document.getElementById('fileInput');
+
+            // VALIDATE OR CHECK IF ANY FILE IS SELECTED.
+            if (fi.files.length > 0) {
+
+                // THE TOTAL FILE COUNT.
+                var info =
+                    'Total Files: <b>' + fi.files.length + '</b></br >';
+
+                // RUN A LOOP TO CHECK EACH SELECTED FILE.
+                for (var i = 0; i <= fi.files.length - 1; i++) {
+
+                    var fname = fi.files.item(i).name;      // THE NAME OF THE FILE.
+                    var fsize = fi.files.item(i).size;      // THE SIZE OF THE FILE.
+
+                    // SHOW THE EXTRACTED DETAILS OF THE FILE.
+                    document.getElementById('names').innerHTML =
+                        document.getElementById('names').innerHTML + '<br /> ' +
+                        fname + ' (<b>' + fsize + '</b> bytes)';
+                }
+
+                document.getElementById('names').style.display = 'block';
+
+                document.getElementById('result').style.display = 'none';
+            }
+            //else {
+            //    alert('Please select a file.')
+            //}
+        }
+        function hideInfo() {
+            document.getElementById('names').style.display = 'none';
+        }
+    </script>
+    <style>
+        body {
+            background: rgba(0,0,0,0.9);
+        }
+
+        form {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            margin-left: -250px;
+            width: 500px;
+            height: 200px;
+            border: 4px dashed #fff;
+        }
+
+            form p {
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                line-height: 170px;
+                color: #ffffff;
+                font-family: Arial;
+            }
+
+            form input {
+                position: absolute;
+                margin: 0;
+                padding: 0;
+                width: 100%;
+                height: 100%;
+                outline: none;
+                opacity: 0;
+            }
+
+            form button {
+                margin: 0;
+                color: #fff;
+                background: #16a085;
+                border: none;
+                width: 508px;
+                height: 35px;
+                margin-top: -20px;
+                margin-left: -4px;
+                border-radius: 4px;
+                border-bottom: 4px solid #117A60;
+                transition: all .2s ease;
+                outline: none;
+            }
+
+                form button:hover {
+                    background: #149174;
+                    color: #0C5645;
+                }
+
+                form button:active {
+                    border: 0;
+                }
+
+        #names {
+            line-height: 20px;
+        }
+        ul{
+            width:100%;
+        }
+        li {
+            width: 85%;
+            float:left;
+            color: white;
+            text-align:center;
+        }
+
+    </style>
+    <form method="post" asp-page="Index" enctype="multipart/form-data">
+        <input type="file" name="files" id="fileInput" onchange="FileDetails()" multiple="multiple" />
+
+        <p id="formTilte">Drag your files here or click in this area.</p>
+        <button type="submit" onclick="hideInfo()">Upload</button>
+        <p id="names"></p>
+
+
+        @if (Model.WordsAmount != null && Model.WordsAmount.Keys.Count > 0)
+        {
+            <div id="result">
+                <ul>
+                    @foreach (var word in Model.WordsAmount)
+                    {
+                        <li>@word.Key - @word.Value</li>
+                    }
+                </ul>
+            </div>
+
+        }
+    </form>
+</body>
+</html>
